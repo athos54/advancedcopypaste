@@ -9,10 +9,10 @@ describe('CheckCommand module', function() {
 		
 		it('deberia ser true',function(done){
 
-			CheckCommand.comprobarComando(function(err){
+			CheckCommand.comprobarComando(function(success){
 
-				if(err){
-					expect(err).to.equal('true')
+				if(success){
+					expect(success).to.equal('true')
 					// console.log('biennnnnn');
 					done();
 				}

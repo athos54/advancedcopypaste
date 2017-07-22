@@ -2,21 +2,22 @@
 
 const { exec } = require('child_process');
 
-function  comprobarComando (done){
+
+function  comprobarComando (succeeded){
 	try{
-		// var cmd = 'type xclip';
-		var cmd = 'type xcdlip';
+		var cmd = 'type xclip';
+		// var cmd = 'type xcdlip';
 		exec(cmd, function (err, stdout, stderr){
 			var posicionDeLaCadena = stdout.indexOf("/");
 
 			var laCadenaExiste=(posicionDeLaCadena != -1);
 
-			if(laCadenaExiste) done('true');
-			else done('false');
+			if(laCadenaExiste) succeeded('true');
+			else succeeded('false');
 		})
 
 	}catch(err){
-		done();
+		succeeded();
 	}
 }
 
