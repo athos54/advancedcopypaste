@@ -39,110 +39,87 @@ console.log('');
 // 	console.log('hola');
 // },1000)
 
-ioHook.on("keydown",function(msg){
-  // console.log(msg);
-  
-  // if (msg.rawcode=='83') {
-  //   ioHook.stop();
-  //   process.stdin.pause();
-  // }
+ioHook.on("keypress",function(msg){
 
-  if (msg.keycode=='46') { //ctrl c
-  	if(secuenciaCtrlC.length != 0 && yaSeHaPegadoUnaVez==true){ //SI LA PILA NO ESTA VACIA Y YA SE HA PEGADO UNA VEZ
-  		
-  		if (resetearPila==true){
+	if (msg.keychar=='3') { //ctrl c
+	  	// console.log(secuenciaCtrlC.length)
+	  	if(secuenciaCtrlC.length != 0 && yaSeHaPegadoUnaVez==true){ //SI LA PILA NO ESTA VACIA Y YA SE HA PEGADO UNA VEZ
+	  		
+	  		if (resetearPila==true){
 
-  			resetearPila=false;
-  			yaSeHaPegadoUnaVez=false;
-  			secuenciaCtrlC=[];
-  			console.log('Se ha limpiado la pila, puedes volver a empezar a copiar');
+	  			resetearPila=false;
+	  			yaSeHaPegadoUnaVez=false;
+	  			secuenciaCtrlC=[];
+	  			console.log('Se ha limpiado la pila, puedes volver a empezar a copiar');
 
-  		}else{
+	  		}else{
 
-  			resetearPila=true;
-  			console.log('');
-			console.log('ALERTA, TIENES LAS SIGUIENTES COSAS EN EL PORTAPAPELES');
-			console.log('');
-			console.log(secuenciaCtrlC);
-			console.log('');
-			console.log('VUELVE A PRESIONAR CTRL + C PARA LIMPIAR LA PILA Y VOLVER A EMPEZAR A COPIAR');
-			console.log('');
+	  			resetearPila=true;
+	  			console.log('');
+	  			console.log('ALERTA, TIENES LAS SIGUIENTES COSAS EN EL PORTAPAPELES');
+	  			console.log('');
+	  			console.log(secuenciaCtrlC);
+	  			console.log('');
+	  			console.log('VUELVE A PRESIONAR CTRL + C PARA LIMPIAR LA PILA Y VOLVER A EMPEZAR A COPIAR');
+	  			console.log('');
+
+	  		}
+
+	  	}else if(yaSeHaPegadoUnaVez==false){
+	  		var comando = 'xclip -o -sel p';
+
+
+			// var comando = "echo "+secuenciaCtrlC[0]+" | xclip -selection c"
+			exec(comando, function (err, stdout, stderr){
+
+
+				secuenciaCtrlC.push(stdout);
+				console.log(secuenciaCtrlC)
+				beep(1);
+				var comandoDePegado = "echo "+secuenciaCtrlC[0]+" | xclip -selection c"
+				exec(comandoDePegado, function (err, stdout, stderr){});
+			});
+
+		}else{
 
 		}
+	// console.log(secuenciaCtrlC);
+	}
 
-	}else if(yaSeHaPegadoUnaVez==false){
-	  	var comando = 'xclip -o -sel p';
 
-		
-		// var comando = "echo "+secuenciaCtrlC[0]+" | xclip -selection c"
-	    exec(comando, function (err, stdout, stderr){
 
-		
-			secuenciaCtrlC.push(stdout);
-			console.log(secuenciaCtrlC)
-			beep(1);
+	if (msg.keychar=='22') {
+
+		if(secuenciaCtrlC.length!=0){
+			// if (yaSeHaPegadoUnaVez==false){
+			// 	secuenciaCtrlC.splice(0,1);
+			// }
+
+			resetearPila=false;
+			yaSeHaPegadoUnaVez=true;
+
+			secuenciaCtrlC.splice(0,1);
 			var comandoDePegado = "echo "+secuenciaCtrlC[0]+" | xclip -selection c"
 			exec(comandoDePegado, function (err, stdout, stderr){});
-		});
-
-	}else{
-
-	}
-  }
-
-
-
-  if (msg.keycode=='47') {
-  	console.log(secuenciaCtrlC)
-  	if(secuenciaCtrlC.length!=0){
-  		if (yaSeHaPegadoUnaVez==false){
-		secuenciaCtrlC.splice(0,1);
-  			
-  		}
-  		resetearPila=false;
-  		yaSeHaPegadoUnaVez=true;
-  		// console.log('uiui')
-		// console.log(secuenciaCtrlC[0])
-		var comandoDePegado = "echo "+secuenciaCtrlC[0]+" | xclip -selection c"
-		exec(comandoDePegado, function (err, stdout, stderr){});
-		secuenciaCtrlC.splice(0,1);
-		if(secuenciaCtrlC.length==0){
+			
+			if(secuenciaCtrlC.length==0){
+				secuenciaCtrlC=[];
+				yaSeHaPegadoUnaVez=false;
+				resetearPila=false;	
+			}
+		}else{
 			console.log('');
 			console.log('NO QUEDAN COSAS EN EL PORTAPAPELES');
 			console.log('');
 
 			secuenciaCtrlC=[];
 			yaSeHaPegadoUnaVez=false;
-			resetearPila=false;	
+			resetearPila=false;
 		}
-  	  	// console.log(secuenciaCtrlC.length)
-		// console.log(secuenciaCtrlC)
-	}else{
-		console.log('');
-		console.log('NO QUEDAN COSAS EN EL PORTAPAPELES');
-		console.log('');
 
-		secuenciaCtrlC=[];
-		yaSeHaPegadoUnaVez=false;
-		resetearPila=false;
+	console.log(secuenciaCtrlC);
 	}
-  }
-
-  if (msg.keycode=='38') {
-  	console.log(secuenciaCtrlC);
-  }
-
 });
-
-
-
-
-
-  
-  
-
-// process.stdin.setRawMode(true);
-// process.stdin.resume();
 
 
 
