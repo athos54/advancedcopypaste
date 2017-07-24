@@ -1,14 +1,16 @@
 // var checkCommand = require('./checkCommand');
-var keypress = require('keypress');
+// var keypress = require('keypress');
 const { exec } = require('child_process');
 var beep = require('beepbeep');
+const ioHook = require('/home/athos/Documentos/proyectos/advancedCopyPaste/node_modules/iohook-master/index.js');
+
 
 // checkCommand.comprobarComando();
 var secuenciaCtrlC=[];
 var yaSeHaPegadoUnaVez=false;
 var resetearPila=false;
 
-keypress(process.stdin);
+// keypress(process.stdin);
 
 console.log('');
 console.log('    ###################################################################');
@@ -37,13 +39,15 @@ console.log('');
 // 	console.log('hola');
 // },1000)
 
-process.stdin.on('keypress', function (ch, key) {
-  // console.log('got "keypress"', key);
-  if (key && key.ctrl && key.name == 's') {
-    process.stdin.pause();
-  }
+ioHook.on("keydown",function(msg){
+  // console.log(msg);
   
-  if (key && key.ctrl && key.name == 'c') {
+  // if (msg.rawcode=='83') {
+  //   ioHook.stop();
+  //   process.stdin.pause();
+  // }
+
+  if (msg.keycode=='46') { //ctrl c
   	if(secuenciaCtrlC.length != 0 && yaSeHaPegadoUnaVez==true){ //SI LA PILA NO ESTA VACIA Y YA SE HA PEGADO UNA VEZ
   		
   		if (resetearPila==true){
@@ -69,10 +73,16 @@ process.stdin.on('keypress', function (ch, key) {
 	}else if(yaSeHaPegadoUnaVez==false){
 	  	var comando = 'xclip -o -sel p';
 
+		
+		// var comando = "echo "+secuenciaCtrlC[0]+" | xclip -selection c"
 	    exec(comando, function (err, stdout, stderr){
-			secuenciaCtrlC.push(stdout);
-			beep(1);
 
+		
+			secuenciaCtrlC.push(stdout);
+			console.log(secuenciaCtrlC)
+			beep(1);
+			var comandoDePegado = "echo "+secuenciaCtrlC[0]+" | xclip -selection c"
+			exec(comandoDePegado, function (err, stdout, stderr){});
 		});
 
 	}else{
@@ -80,12 +90,21 @@ process.stdin.on('keypress', function (ch, key) {
 	}
   }
 
-  if (key && key.ctrl && key.name == 'v') {
+
+
+  if (msg.keycode=='47') {
+  	console.log(secuenciaCtrlC)
   	if(secuenciaCtrlC.length!=0){
+  		if (yaSeHaPegadoUnaVez==false){
+		secuenciaCtrlC.splice(0,1);
+  			
+  		}
   		resetearPila=false;
   		yaSeHaPegadoUnaVez=true;
-		console.log(secuenciaCtrlC[0])
-		exec('xclip -o', function (err, stdout, stderr){});
+  		// console.log('uiui')
+		// console.log(secuenciaCtrlC[0])
+		var comandoDePegado = "echo "+secuenciaCtrlC[0]+" | xclip -selection c"
+		exec(comandoDePegado, function (err, stdout, stderr){});
 		secuenciaCtrlC.splice(0,1);
 		if(secuenciaCtrlC.length==0){
 			console.log('');
@@ -109,12 +128,22 @@ process.stdin.on('keypress', function (ch, key) {
 	}
   }
 
-  if (key && key.ctrl && key.name == 'l') {
+  if (msg.keycode=='38') {
   	console.log(secuenciaCtrlC);
   }
 
 });
 
 
-process.stdin.setRawMode(true);
-process.stdin.resume();
+
+
+
+  
+  
+
+// process.stdin.setRawMode(true);
+// process.stdin.resume();
+
+
+
+ioHook.start();
