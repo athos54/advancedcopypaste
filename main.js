@@ -2,7 +2,7 @@
 // var keypress = require('keypress');
 const { exec } = require('child_process');
 var beep = require('beepbeep');
-const ioHook = require('/home/athos/Documentos/proyectos/advancedCopyPaste/node_modules/iohook-master/index.js');
+const ioHook = require('./node_modules/iohook-master/index.js');
 
 
 // checkCommand.comprobarComando();

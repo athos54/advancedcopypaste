@@ -1,0 +1,1 @@
+/usr/bin/advancedCopyPaste/node-v8.2.1-linux-x64/bin/node /usr/bin/advancedCopyPaste/main.js
