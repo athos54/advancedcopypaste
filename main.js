@@ -1,6 +1,7 @@
 // var checkCommand = require('./checkCommand');
 var keypress = require('keypress');
 const { exec } = require('child_process');
+var beep = require('beepbeep');
 
 // checkCommand.comprobarComando();
 var secuenciaCtrlC=[];
@@ -28,9 +29,13 @@ console.log('    #                     Autores: LTF & AOC                       
 console.log('    #                                                                 #');
 console.log('    #                                                                 #');
 console.log('    ###################################################################');
+console.log('');
+console.log('');
+  	// beep(2)
 
-console.log('');
-console.log('');
+// setInterval(function(){
+// 	console.log('hola');
+// },1000)
 
 process.stdin.on('keypress', function (ch, key) {
   // console.log('got "keypress"', key);
@@ -39,7 +44,6 @@ process.stdin.on('keypress', function (ch, key) {
   }
   
   if (key && key.ctrl && key.name == 'c') {
-  	
   	if(secuenciaCtrlC.length != 0 && yaSeHaPegadoUnaVez==true){ //SI LA PILA NO ESTA VACIA Y YA SE HA PEGADO UNA VEZ
   		
   		if (resetearPila==true){
@@ -63,11 +67,12 @@ process.stdin.on('keypress', function (ch, key) {
 		}
 
 	}else if(yaSeHaPegadoUnaVez==false){
-
 	  	var comando = 'xclip -o -sel p';
 
 	    exec(comando, function (err, stdout, stderr){
 			secuenciaCtrlC.push(stdout);
+			beep(1);
+
 		});
 
 	}else{

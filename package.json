@@ -2,8 +2,9 @@
   "name": "advancedcopypaste",
   "version": "0.0.1",
   "description": "Powerfull sequential copy paste utility",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
+    "start": "node main.js",
     "test": "mocha lib/**/**.spec.js"
   },
   "author": "",
@@ -13,7 +14,12 @@
     "mocha": "^3.4.2"
   },
   "dependencies": {
+    "beepbeep": "^1.2.1",
+    "bindings": "^1.2.1",
     "chai-as-promised": "^7.1.1",
-    "keypress": "^0.2.1"
+    "cmake-js": "^3.5.0",
+    "keypress": "^0.2.1",
+    "lifecycle": "^1.0.4",
+    "nan": "^2.6.2"
   }
 }
